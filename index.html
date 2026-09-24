@@ -12,6 +12,7 @@
     --ink: #1E1B24; --green: #7BB661; --muted: #D9CCEB;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0; overflow-wrap: break-word; background: var(--night); color: var(--cream);
@@ -56,6 +57,17 @@
   }
   .steps h3 { margin: 0 0 4px; font-size: 18px; }
   .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+  .shops { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px;
+    font-weight: 700; text-decoration: none; border: 2px solid var(--orange);
+  }
+  .btn-main { background: var(--orange); color: var(--ink); }
+  .btn-alt { color: var(--orange); }
+  .btn:hover { filter: brightness(1.1); }
+  .where .grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .where .card div { padding: 22px; }
+  .where .btn { margin-top: 14px; }
   footer { padding: 40px 0 50px; color: var(--muted); font-size: 14px; text-align: center; }
   @media (max-width: 760px) {
     .hero { grid-template-columns: minmax(0, 1fr); padding-top: 20px; }
@@ -71,7 +83,11 @@
     <div>
       <h1>Spooky-cute decor for <span>families</span> &amp; Halloween parties</h1>
       <p>Printable pumpkin carving stencils, “Happy Halloween” bunting, Trick or Treat door signs and matching doormats. Print at home, decorate tonight.</p>
-      <span class="badge">🎃 Shop opening soon</span>
+      <div class="shops">
+        <a class="btn btn-main" data-shop="shopify" hidden>Shop now</a>
+        <a class="btn btn-alt" data-shop="etsy" hidden>Find us on Etsy</a>
+        <span class="badge" data-soon>🎃 Shop opening soon</span>
+      </div>
     </div>
     <img src="img/door-sign-trick-or-treat.jpg" alt="Trick or Treat printable door sign with pumpkins, bats and a full moon" width="900" height="1165">
   </div>
@@ -109,6 +125,23 @@
     </div>
   </section>
 
+  <section class="where" id="shop" data-where hidden>
+    <div class="wrap">
+      <h2>Where to buy</h2>
+      <p class="lead">The same designs in both shops — pick whichever you prefer.</p>
+      <div class="grid">
+        <div class="card" data-shop-card="shopify" hidden><div>
+          <h3>Our online store</h3><p>Buy directly from us: instant PDF downloads and doormats shipped in the USA.</p>
+          <a class="btn btn-main" data-shop="shopify">Visit the store</a>
+        </div></div>
+        <div class="card" data-shop-card="etsy" hidden><div>
+          <h3>Etsy shop</h3><p>Prefer Etsy? Find the whole collection at HalloweenEverything, with Etsy checkout and reviews.</p>
+          <a class="btn btn-alt" data-shop="etsy">Open on Etsy</a>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
   <section class="how">
     <div class="wrap">
       <h2>How printables work</h2>
@@ -125,5 +158,23 @@
 <footer>
   <div class="wrap">© 2026 Everything Halloween · Original designs · everythinghalloween.org</div>
 </footer>
+<script>
+  // Shop links: fill in a URL to show its buttons; leave "" to keep it hidden.
+  const SHOPS = {
+    shopify: "",  // e.g. "https://everythinghalloween.org" or "https://<store>.myshopify.com"
+    etsy: ""      // "https://www.etsy.com/shop/HalloweenEverything" once the shop is open
+  };
+  let any = false;
+  for (const [name, url] of Object.entries(SHOPS)) {
+    if (!url) continue;
+    any = true;
+    document.querySelectorAll(`[data-shop="${name}"]`).forEach(a => { a.href = url; a.hidden = false; });
+    document.querySelectorAll(`[data-shop-card="${name}"]`).forEach(c => { c.hidden = false; });
+  }
+  if (any) {
+    document.querySelector("[data-soon]").hidden = true;
+    document.querySelector("[data-where]").hidden = false;
+  }
+</script>
 </body>
 </html>
